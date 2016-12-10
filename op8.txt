@@ -1,0 +1,83 @@
+
+CS 4V95.003, CS 5V81.012. Implementation of data structures and algorithms
+Fall 2016
+Optional Project 8
+Fri, Nov 11, 2016
+Topic: Graphs, BFS, DFS
+
+Version 1.0: Initial description.
+
+Due: 11:59 PM, Sun, Nov 20.
+
+Solve as many problems as you wish:
+
+
+1. Write a generic version of the Graph class.  Header:
+
+   public class Graph<V extends Vertex,E extends Edge> implements Iterable<V>
+
+   Rewrite the readGraph method so that it can be used to read input and
+   construct a graph.
+
+   public static<V extends Vertex,E extends Edge> Graph<V,E> readGraph(Scanner in)
+   public static<V extends Vertex,E extends Edge> Graph<V,E> readDirectedGraph(Scanner in)
+
+   Add additional parameters to readGraph, as needed.  Usage:
+
+   Graph<EulerVertex,EulerEdge> g = Graph.readGraph(in);
+
+   This will create an undirected graph, whose nodes are of type EulerVertex
+   and edges are of type EulerEdge.  Those classes are defined as:
+
+   class EulerVertex extends Vertex { ... }
+   class EulerEdge extends Edge { ... }
+
+   Rewrite your MP1 code for finding Euler tours or MP3 code for MST,
+   removing all the extra fields added to the Vertex and Edge classes
+   and moving them to derived classes.
+
+
+2. Diameter of a tree.
+   In this problem, you are given an unrooted tree as input.  Since
+   the tree may not be a binary tree, we will represent it with an
+   adjacency list (i.e., it is a graph that happens to be a tree).
+   The following algorithm can be used to find its diameter:
+
+   1. Run BFS from an arbitrary node as root.
+   2. Select a node Z with maximum distance from the first BFS.
+   3. Run a second BFS with Z as root.
+   4. The diameter of the tree is the maximum distance to any node from Z in BFS 2.
+
+   static int diameter(Graph g) { ... }
+   // If the input graph is not a tree, return -1.
+
+ 
+3. Strongly connected components of a directed graph.
+   Implement the algorithm for finding strongly connected components of a
+   directed graph (see p.617 of Cormen et al, Introduction to algorithms, 3rd ed.).
+   Run DFS on G and create a list of nodes ordered by decreasing finish times.
+   Find G^T, the graph obtained by reversing all edges of G.  Run DFS on G^T,
+   but processing the nodes in the order of the list output by the first DFS.
+   Each DFS tree in the second DFS is a strongly connected component.
+
+   static int stronglyConnectedComponents(Graph g) { ... }
+   // Returns the number of strongly connected components of g.
+
+
+4. DAG shortest paths: implement the algorithm for finding shortest paths to
+   all nodes from a given source node s in a DAG.
+
+   static void DAGShortestPaths(Graph g, Vertex s) { ... }
+
+
+5. Finding an odd-length cycle in a non-bipartite graph.  Given a graph, find
+   an odd-length cycle and return it.  If the graph is bipartite, return null.
+
+   Algorithm: run BFS.  If no edge of G connects two nodes at the same level,
+   then the graph is bipartite and has no odd-length cycle.  If two nodes u
+   and v at the same level are connected by edge (u,v), then an odd-length
+   cycle can be found by combining the edge (u,v) with the paths from u and v
+   to their least common ancestor in the BFS tree.  If g is not connected,
+   this is repeated in each component.
+
+   List<Vertex> oddLengthCycle(Graph g) { ... }
